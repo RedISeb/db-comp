@@ -1,0 +1,12 @@
+FROM postgres:16
+
+# Kopiere das Initialisierungs-SQL-Skript in den Container
+COPY init.sql /docker-entrypoint-initdb.d/
+
+# Setze Umgebungsvariablen für den PostgreSQL-User und das Passwort
+ENV POSTGRES_USER=admin
+ENV POSTGRES_PASSWORD=password
+ENV POSTGRES_DB=test
+
+# Exponiere den Port 5432 (PostgreSQL-Standardport)
+EXPOSE 5432
