@@ -23,16 +23,19 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		config, err := config.LoadConfig()
+		dbConfigs, err := config.LoadConfig()
 		if err != nil {
 			log.Fatalf("Error loading config: %v", err)
 		}
-		_, err = db.Connect(config)
-		if err != nil {
-			log.Fatalf("Error connecting to database: %v", err)
+		for dbKey, dbConfig := range dbConfigs {
+			fmt.Printf("Validating connection to %s...\n", dbKey)
+			_, err := db.Connect(dbConfig)
+			if err != nil {
+				log.Printf("Error connecting to database %s: %v", dbKey, err)
+			} else {
+				fmt.Printf("Database connection to %s is valid!\n", dbKey)
+			}
 		}
-
-		fmt.Println("Database connection is valid!")
 	},
 }
 
